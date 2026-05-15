@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Darax S.A. — Construcción e Ingeniería</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0E0D14; --s1: #17161F; --s2: #211F2C;
+      --acc: #E8862A; --acc-dim: rgba(232,134,42,0.10); --acc-bdr: rgba(232,134,42,0.22);
+      --txt: #EDE9F5; --txt2: #9794A6; --txt3: #5E5C70;
+      --sh: 0 2px 4px rgba(0,0,0,.55), 0 10px 28px rgba(0,0,0,.40), 0 1px 0 rgba(255,255,255,.04) inset;
+      --sh-btn: 0 4px 18px rgba(232,134,42,.32), 0 1px 0 rgba(255,255,255,.12) inset;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--txt); font-family: 'Barlow', sans-serif; font-weight: 300; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+    h1,h2,h3,h4 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; letter-spacing: -0.02em; line-height: 1.08; }
+
+    #nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.25rem 1.5rem; transition: background .3s, backdrop-filter .3s, box-shadow .3s; }
+    #nav.scrolled { background: rgba(14,13,20,.94); backdrop-filter: blur(14px); box-shadow: 0 1px 0 rgba(255,255,255,.05), 0 6px 28px rgba(0,0,0,.4); }
+    .nav-inner { max-width: 1152px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: inline-flex; align-items: center; gap: .75rem; text-decoration: none; }
+    .logo-mark { width: 36px; height: 36px; background: var(--acc); display: flex; align-items: center; justify-content: center; transition: transform .2s cubic-bezier(.34,1.56,.64,1); }
+    .logo:hover .logo-mark { transform: scale(1.1); }
+    .logo-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--txt); }
+    .logo-sub { font-family: 'Barlow Condensed', sans-serif; font-weight: 400; font-size: .62rem; letter-spacing: .16em; color: var(--acc); margin-top: -5px; }
+    .nav-links { display: flex; align-items: center; gap: 2rem; }
+    .nav-link { position: relative; color: var(--txt2); font-size: .82rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; text-decoration: none; transition: color .2s; }
+    .nav-link::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: var(--acc); transition: width .25s cubic-bezier(.4,0,.2,1); }
+    .nav-link:hover { color: var(--txt); }
+    .nav-link:hover::after { width: 100%; }
+
+    .btn-p { display: inline-flex; align-items: center; gap: .5rem; background: var(--acc); color: #0E0D14; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .85rem; letter-spacing: .09em; text-transform: uppercase; padding: .75rem 1.6rem; border: none; cursor: pointer; text-decoration: none; box-shadow: var(--sh-btn); transition: background .2s, transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .2s; }
+    .btn-p:hover { background: #f5933a; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,134,42,.45); }
+    .btn-p:active { transform: translateY(0); }
+    .btn-p:focus-visible { outline: 2px solid var(--acc); outline-offset: 3px; }
+    .btn-o { display: inline-flex; align-items: center; gap: .5rem; background: transparent; color: var(--txt); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .85rem; letter-spacing: .09em; text-transform: uppercase; padding: .7rem 1.5rem; border: 1px solid var(--acc-bdr); cursor: pointer; text-decoration: none; transition: border-color .2s, background .2s, transform .15s cubic-bezier(.34,1.56,.64,1); }
+    .btn-o:hover { border-color: var(--acc); background: var(--acc-dim); transform: translateY(-2px); }
+    .btn-o:active { transform: translateY(0); }
+
+    .tag { display: inline-flex; align-items: center; gap: .6rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--acc); margin-bottom: .9rem; }
+    .tag::before { content: ''; display: block; width: 1.8rem; height: 1px; background: var(--acc); }
+
+    .scard { background: var(--s1); border: 1px solid rgba(255,255,255,.05); border-top: 2px solid transparent; box-shadow: var(--sh); padding: 2rem; transition: border-top-color .3s, transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s; }
+    .scard:hover { border-top-color: var(--acc); transform: translateY(-5px); box-shadow: 0 12px 36px rgba(0,0,0,.5), 0 2px 8px rgba(232,134,42,.12); }
+    .icon-box { width: 48px; height: 48px; background: var(--acc-dim); border: 1px solid var(--acc-bdr); display: flex; align-items: center; justify-content: center; margin-bottom: 1.4rem; }
+
+    .pcard { position: relative; overflow: hidden; box-shadow: var(--sh); cursor: pointer; }
+    .pcard img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(30%); transition: transform .55s cubic-bezier(.4,0,.2,1), filter .55s; }
+    .pcard:hover img { transform: scale(1.07); filter: grayscale(0%); }
+    .pcard .ov { position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,13,20,.92) 0%, rgba(14,13,20,.25) 55%, transparent 100%); }
+    .pcard .tint { position: absolute; inset: 0; background: rgba(232,134,42,.1); mix-blend-mode: multiply; opacity: 0; transition: opacity .3s; }
+    .pcard:hover .tint { opacity: 1; }
+    .pcard .pinfo { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; transform: translateY(5px); transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+    .pcard:hover .pinfo { transform: translateY(0); }
+    .ptag { display: inline-block; background: var(--acc); color: #0E0D14; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: .18rem .55rem; margin-bottom: .45rem; }
+
+    .finput { width: 100%; background: var(--s2); border: 1px solid rgba(255,255,255,.07); color: var(--txt); font-family: 'Barlow', sans-serif; font-weight: 300; font-size: .95rem; padding: .85rem 1rem; outline: none; transition: border-color .2s, box-shadow .2s; }
+    .finput::placeholder { color: var(--txt3); }
+    .finput:focus { border-color: var(--acc); box-shadow: 0 0 0 3px rgba(232,134,42,.1); }
+    label.flbl { display: block; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--txt2); margin-bottom: .45rem; }
+
+    .rev { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s cubic-bezier(.34,1.56,.64,1); }
+    .rev.in { opacity: 1; transform: translateY(0); }
+
+    #mmenu { display: none; }
+    #mmenu.open { display: block; }
+
+    @media (max-width: 767px) {
+      .nav-links, .nav-cta { display: none !important; }
+      #mbtoggle { display: flex !important; }
+      .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .svc-grid { grid-template-columns: 1fr !important; }
+      .proj-grid { grid-template-columns: 1fr !important; }
+      .proj-grid .pcard { grid-column: span 1 !important; height: 220px !important; }
+      .contact-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+      .footer-grid { grid-template-columns: repeat(2,1fr) !important; }
+    }
+    @media (max-width: 479px) {
+      .footer-grid { grid-template-columns: 1fr !important; }
+      .form-row { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M2 18L10 3L18 18H2Z" fill="#0E0D14"/>
+          <rect x="7.5" y="11" width="5" height="7" fill="#0E0D14"/>
+        </svg>
+      </div>
+      <div><div class="logo-name">DARAX</div><div class="logo-sub">S.A.</div></div>
+    </a>
+    <div class="nav-links">
+      <a href="#servicios" class="nav-link">Servicios</a>
+      <a href="#proyectos" class="nav-link">Proyectos</a>
+      <a href="#contacto" class="nav-link">Contacto</a>
+    </div>
+    <a href="#contacto" class="btn-p nav-cta">Cotizar</a>
+    <button id="mbtoggle" onclick="document.getElementById('mmenu').classList.toggle('open')" style="display:none;background:none;border:none;color:var(--txt);cursor:pointer;padding:4px;align-items:center;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="mmenu" style="background:var(--s1);border-top:1px solid rgba(255,255,255,.05);padding:1.5rem;">
+    <div style="display:flex;flex-direction:column;gap:1.25rem;">
+      <a href="#servicios" class="nav-link" onclick="document.getElementById('mmenu').classList.remove('open')">Servicios</a>
+      <a href="#proyectos" class="nav-link" onclick="document.getElementById('mmenu').classList.remove('open')">Proyectos</a>
+      <a href="#contacto" class="nav-link" onclick="document.getElementById('mmenu').classList.remove('open')">Contacto</a>
+      <a href="#contacto" class="btn-p" style="justify-content:center;">Cotizar Proyecto</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;">
+  <div style="position:absolute;inset:0;z-index:0;">
+    <img src="https://placehold.co/1920x1080/1a1926/252438" alt="" style="width:100%;height:100%;object-fit:cover;filter:brightness(.45) grayscale(20%);" />
+    <div style="position:absolute;inset:0;background:linear-gradient(130deg,rgba(14,13,20,.92) 0%,rgba(14,13,20,.45) 60%,rgba(14,13,20,.72) 100%)"></div>
+    <div style="position:absolute;top:-5%;left:-8%;width:55%;height:75%;background:radial-gradient(ellipse,rgba(232,134,42,.07) 0%,transparent 70%);pointer-events:none"></div>
+    <div style="position:absolute;bottom:0;right:0;width:45%;height:55%;background:radial-gradient(ellipse,rgba(232,134,42,.04) 0%,transparent 70%);pointer-events:none"></div>
+  </div>
+  <div style="position:relative;z-index:1;max-width:1152px;margin:0 auto;padding:9rem 1.5rem 5rem;width:100%;">
+    <div style="max-width:680px;">
+      <div class="tag rev">Construcción e Ingeniería</div>
+      <h1 style="font-size:clamp(3.2rem,7.5vw,6.8rem);color:var(--txt);margin-bottom:1.5rem;" class="rev">
+        Construimos<br/><span style="color:var(--acc);">el futuro</span><br/>con precisión.
+      </h1>
+      <p style="font-size:1.08rem;color:var(--txt2);max-width:490px;margin-bottom:2.5rem;" class="rev">
+        Darax S.A. lleva décadas transformando ideas en estructuras sólidas. Obras residenciales, comerciales e industriales con los más altos estándares de calidad.
+      </p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;" class="rev">
+        <a href="#proyectos" class="btn-p">Ver Proyectos <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a href="#contacto" class="btn-o">Contáctanos</a>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:.45;z-index:1;">
+    <span style="font-family:'Barlow Condensed',sans-serif;font-size:.65rem;letter-spacing:.14em;color:var(--txt2)">SCROLL</span>
+    <div style="width:1px;height:36px;background:linear-gradient(to bottom,var(--txt2),transparent)"></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div style="background:var(--s1);border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);">
+  <div class="stats-grid" style="max-width:1152px;margin:0 auto;padding:3rem 1.5rem;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;">
+    <div class="rev" style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:3rem;color:var(--acc);letter-spacing:-.03em;">25+</div><div style="font-size:.82rem;color:var(--txt2);letter-spacing:.06em;text-transform:uppercase;font-weight:500;margin-top:.25rem;">Años de experiencia</div></div>
+    <div class="rev" style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:3rem;color:var(--acc);letter-spacing:-.03em;">500+</div><div style="font-size:.82rem;color:var(--txt2);letter-spacing:.06em;text-transform:uppercase;font-weight:500;margin-top:.25rem;">Proyectos completados</div></div>
+    <div class="rev" style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:3rem;color:var(--acc);letter-spacing:-.03em;">200+</div><div style="font-size:.82rem;color:var(--txt2);letter-spacing:.06em;text-transform:uppercase;font-weight:500;margin-top:.25rem;">Clientes satisfechos</div></div>
+    <div class="rev" style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:3rem;color:var(--acc);letter-spacing:-.03em;">15</div><div style="font-size:.82rem;color:var(--txt2);letter-spacing:.06em;text-transform:uppercase;font-weight:500;margin-top:.25rem;">Premios del sector</div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="servicios" style="padding:7rem 1.5rem;">
+  <div style="max-width:1152px;margin:0 auto;">
+    <div class="tag rev">Lo que hacemos</div>
+    <h2 style="font-size:clamp(2.4rem,5vw,4rem);margin-bottom:.75rem;" class="rev">Nuestros <span style="color:var(--acc)">servicios</span></h2>
+    <p style="color:var(--txt2);max-width:500px;margin-bottom:4rem;" class="rev">Soluciones integrales en construcción, desde la planificación inicial hasta la entrega final.</p>
+    <div class="svc-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;">
+      <div class="scard rev">
+        <div class="icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><path d="M3 21h18M9 21V10M15 21V10M3 10l9-7 9 7"/></svg></div>
+        <h3 style="font-size:1.35rem;margin-bottom:.6rem;">Construcción Residencial</h3>
+        <p style="color:var(--txt2);font-size:.93rem;">Casas unifamiliares, condominios y urbanizaciones con los más altos estándares de confort y durabilidad.</p>
+      </div>
+      <div class="scard rev">
+        <div class="icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><rect x="2" y="7" width="20" height="14"/><path d="M16 21V7a4 4 0 0 0-8 0v14"/><path d="M2 7l10-5 10 5"/></svg></div>
+        <h3 style="font-size:1.35rem;margin-bottom:.6rem;">Edificios Comerciales</h3>
+        <p style="color:var(--txt2);font-size:.93rem;">Oficinas, locales y centros empresariales con diseño arquitectónico moderno y funcional.</p>
+      </div>
+      <div class="scard rev">
+        <div class="icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><rect x="1" y="4" width="22" height="13"/><path d="M1 17h22M8 17v4M16 17v4M8 21h8"/></svg></div>
+        <h3 style="font-size:1.35rem;margin-bottom:.6rem;">Obras Industriales</h3>
+        <p style="color:var(--txt2);font-size:.93rem;">Plantas de producción, bodegas y complejos industriales con especificaciones técnicas de máxima exigencia.</p>
+      </div>
+      <div class="scard rev">
+        <div class="icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h3 style="font-size:1.35rem;margin-bottom:.6rem;">Remodelaciones</h3>
+        <p style="color:var(--txt2);font-size:.93rem;">Transformamos espacios existentes en ambientes renovados y adaptados a nuevas necesidades.</p>
+      </div>
+      <div class="scard rev">
+        <div class="icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h3 style="font-size:1.35rem;margin-bottom:.6rem;">Gestión de Proyectos</h3>
+        <p style="color:var(--txt2);font-size:.93rem;">Supervisión integral del proceso constructivo garantizando plazos, presupuestos y calidad.</p>
+      </div>
+      <div class="scard rev">
+        <div class="icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+        <h3 style="font-size:1.35rem;margin-bottom:.6rem;">Consultoría e Ingeniería</h3>
+        <p style="color:var(--txt2);font-size:.93rem;">Asesoría en diseño estructural, análisis de suelo y factibilidad técnica de proyectos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="proyectos" style="padding:7rem 1.5rem;background:var(--s1);position:relative;overflow:hidden;">
+  <div style="position:absolute;top:0;right:0;width:50%;height:100%;background:radial-gradient(ellipse at top right,rgba(232,134,42,.055) 0%,transparent 60%);pointer-events:none"></div>
+  <div style="max-width:1152px;margin:0 auto;position:relative;z-index:1;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:3rem;">
+      <div>
+        <div class="tag rev">Nuestro trabajo</div>
+        <h2 style="font-size:clamp(2.4rem,5vw,4rem);" class="rev">Proyectos <span style="color:var(--acc)">destacados</span></h2>
+      </div>
+      <a href="#contacto" class="btn-o rev">Ver todos →</a>
+    </div>
+    <div class="proj-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+      <div class="pcard rev" style="grid-column:span 2;height:360px;">
+        <img src="https://placehold.co/900x360/1a1926/252438" alt="Torre Corporativa Norte" />
+        <div class="ov"></div><div class="tint"></div>
+        <div class="pinfo"><div class="ptag">Comercial</div><h3 style="font-size:1.55rem;color:var(--txt);">Torre Corporativa Norte</h3><p style="color:var(--txt2);font-size:.85rem;">25 pisos · Ciudad de Guatemala · 2023</p></div>
+      </div>
+      <div class="pcard rev" style="height:360px;">
+        <img src="https://placehold.co/450x360/17161F/2d2b3a" alt="Residencial Los Pinos" />
+        <div class="ov"></div><div class="tint"></div>
+        <div class="pinfo"><div class="ptag">Residencial</div><h3 style="font-size:1.3rem;color:var(--txt);">Residencial Los Pinos</h3><p style="color:var(--txt2);font-size:.85rem;">80 unidades · 2022</p></div>
+      </div>
+      <div class="pcard rev" style="height:230px;">
+        <img src="https://placehold.co/450x230/211F2C/2d2b3a" alt="Planta Industrial Sigma" />
+        <div class="ov"></div><div class="tint"></div>
+        <div class="pinfo"><div class="ptag">Industrial</div><h3 style="font-size:1.25rem;color:var(--txt);">Planta Industrial Sigma</h3><p style="color:var(--txt2);font-size:.85rem;">15,000 m² · 2023</p></div>
+      </div>
+      <div class="pcard rev" style="height:230px;">
+        <img src="https://placehold.co/450x230/1a1926/2d2b3a" alt="Centro Comercial Zona 4" />
+        <div class="ov"></div><div class="tint"></div>
+        <div class="pinfo"><div class="ptag">Comercial</div><h3 style="font-size:1.25rem;color:var(--txt);">Centro Comercial Zona 4</h3><p style="color:var(--txt2);font-size:.85rem;">8,500 m² · 2024</p></div>
+      </div>
+      <div class="pcard rev" style="height:230px;">
+        <img src="https://placehold.co/450x230/17161F/302E42" alt="Puente Río Grande" />
+        <div class="ov"></div><div class="tint"></div>
+        <div class="pinfo"><div class="ptag">Infraestructura</div><h3 style="font-size:1.25rem;color:var(--txt);">Puente Río Grande</h3><p style="color:var(--txt2);font-size:.85rem;">320 m longitud · 2024</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding:6rem 1.5rem;background:linear-gradient(135deg,#15131E 0%,#0E0D14 55%,#181624 100%);position:relative;overflow:hidden;text-align:center;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(232,134,42,.09) 0%,transparent 65%);pointer-events:none"></div>
+  <div style="max-width:1152px;margin:0 auto;position:relative;z-index:1;">
+    <div class="tag rev" style="justify-content:center;">¿Tienes un proyecto?</div>
+    <h2 style="font-size:clamp(2.6rem,5.5vw,4.8rem);max-width:680px;margin:0 auto 1.25rem;" class="rev">Hagamos algo<br/><span style="color:var(--acc)">extraordinario</span> juntos.</h2>
+    <p style="color:var(--txt2);max-width:420px;margin:0 auto 2.5rem;" class="rev">Cuéntanos tu visión y nuestro equipo la convertirá en una estructura que perdure por generaciones.</p>
+    <a href="#contacto" class="btn-p rev" style="font-size:.95rem;padding:1rem 2.5rem;">Solicitar cotización gratuita <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto" style="padding:7rem 1.5rem;background:var(--s1);">
+  <div class="contact-grid" style="max-width:1152px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
+    <div>
+      <div class="tag rev">Hablemos</div>
+      <h2 style="font-size:clamp(2.4rem,4vw,3.6rem);margin-bottom:1.25rem;" class="rev">Contáctanos<br/><span style="color:var(--acc)">hoy mismo</span></h2>
+      <p style="color:var(--txt2);margin-bottom:3rem;" class="rev">Nuestro equipo está listo para escuchar tu proyecto y ofrecerte la mejor solución constructiva.</p>
+      <div style="display:flex;flex-direction:column;gap:1.5rem;" class="rev">
+        <div style="display:flex;align-items:flex-start;gap:1rem;">
+          <div class="icon-box" style="flex-shrink:0;width:40px;height:40px;margin-bottom:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:.2rem;">Dirección</div><div style="color:var(--txt2);font-size:.93rem;">15 Calle 3-20 Zona 10<br/>Ciudad de Guatemala</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:1rem;">
+          <div class="icon-box" style="flex-shrink:0;width:40px;height:40px;margin-bottom:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12.3a2 2 0 0 1 1.98-2.18h3a2 2 0 0 1 2 1.72c.12.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.76-.76a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16.5z"/></svg></div>
+          <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:.2rem;">Teléfono</div><div style="color:var(--txt2);font-size:.93rem;">+502 2234-5678</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:1rem;">
+          <div class="icon-box" style="flex-shrink:0;width:40px;height:40px;margin-bottom:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:.2rem;">Email</div><div style="color:var(--txt2);font-size:.93rem;">info@daraxsa.com</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:1rem;">
+          <div class="icon-box" style="flex-shrink:0;width:40px;height:40px;margin-bottom:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:.2rem;">Horario</div><div style="color:var(--txt2);font-size:.93rem;">Lun – Vie: 8:00 – 18:00<br/>Sáb: 8:00 – 13:00</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="rev" style="background:var(--s2);border:1px solid rgba(255,255,255,.05);padding:2.5rem;box-shadow:var(--sh);">
+      <h3 style="font-size:1.7rem;margin-bottom:.4rem;">Solicitar cotización</h3>
+      <p style="color:var(--txt2);font-size:.88rem;margin-bottom:2rem;">Te contactaremos en menos de 24 horas.</p>
+      <form id="cform" style="display:flex;flex-direction:column;gap:1.2rem;" onsubmit="handleSubmit(event)">
+        <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div><label class="flbl">Nombre</label><input type="text" placeholder="Tu nombre" class="finput" required /></div>
+          <div><label class="flbl">Empresa</label><input type="text" placeholder="Nombre de empresa" class="finput" /></div>
+        </div>
+        <div><label class="flbl">Correo electrónico</label><input type="email" placeholder="tu@email.com" class="finput" required /></div>
+        <div>
+          <label class="flbl">Tipo de proyecto</label>
+          <select class="finput" style="cursor:pointer;-webkit-appearance:none;">
+            <option value="" style="background:var(--s2)">Seleccionar tipo…</option>
+            <option value="residencial" style="background:var(--s2)">Residencial</option>
+            <option value="comercial" style="background:var(--s2)">Comercial</option>
+            <option value="industrial" style="background:var(--s2)">Industrial</option>
+            <option value="remodelacion" style="background:var(--s2)">Remodelación</option>
+            <option value="otro" style="background:var(--s2)">Otro</option>
+          </select>
+        </div>
+        <div><label class="flbl">Descripción</label><textarea placeholder="Cuéntanos sobre tu proyecto, ubicación, dimensiones…" class="finput" rows="4" style="resize:vertical;"></textarea></div>
+        <button type="submit" class="btn-p" style="width:100%;justify-content:center;padding:1rem;font-size:.9rem;">Enviar solicitud <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </form>
+      <div id="fsuccess" style="display:none;text-align:center;padding:2.5rem 1rem;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="1.5" style="margin:0 auto 1rem;display:block;"><circle cx="12" cy="12" r="10"/><polyline points="16 8 10 14 8 12"/></svg>
+        <h3 style="font-size:1.5rem;margin-bottom:.5rem;">¡Mensaje enviado!</h3>
+        <p style="color:var(--txt2);font-size:.9rem;">Nos pondremos en contacto contigo pronto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:var(--bg);border-top:1px solid rgba(255,255,255,.05);padding:3.5rem 1.5rem 2.5rem;">
+  <div style="max-width:1152px;margin:0 auto;">
+    <div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;">
+      <div>
+        <a href="#" class="logo" style="margin-bottom:.75rem;">
+          <div class="logo-mark" style="width:30px;height:30px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M2 18L10 3L18 18H2Z" fill="#0E0D14"/><rect x="7.5" y="11" width="5" height="7" fill="#0E0D14"/></svg></div>
+          <div style="margin-left:.6rem;"><div class="logo-name" style="font-size:1rem;">DARAX S.A.</div></div>
+        </a>
+        <p style="color:var(--txt3);font-size:.85rem;line-height:1.7;max-width:260px;margin-top:.75rem;">Más de 25 años construyendo el futuro de Guatemala con compromiso, innovación y excelencia técnica.</p>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:.13em;text-transform:uppercase;color:var(--txt);margin-bottom:1rem;">Servicios</div>
+        <div style="display:flex;flex-direction:column;gap:.55rem;">
+          <a href="#servicios" style="color:var(--txt3);font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--txt2)'" onmouseout="this.style.color='var(--txt3)'">Residencial</a>
+          <a href="#servicios" style="color:var(--txt3);font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--txt2)'" onmouseout="this.style.color='var(--txt3)'">Comercial</a>
+          <a href="#servicios" style="color:var(--txt3);font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--txt2)'" onmouseout="this.style.color='var(--txt3)'">Industrial</a>
+          <a href="#servicios" style="color:var(--txt3);font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--txt2)'" onmouseout="this.style.color='var(--txt3)'">Remodelaciones</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:.13em;text-transform:uppercase;color:var(--txt);margin-bottom:1rem;">Empresa</div>
+        <div style="display:flex;flex-direction:column;gap:.55rem;">
+          <a href="#proyectos" style="color:var(--txt3);font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--txt2)'" onmouseout="this.style.color='var(--txt3)'">Proyectos</a>
+          <a href="#contacto" style="color:var(--txt3);font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--txt2)'" onmouseout="this.style.color='var(--txt3)'">Contacto</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:.13em;text-transform:uppercase;color:var(--txt);margin-bottom:1rem;">Síguenos</div>
+        <div style="display:flex;gap:.65rem;">
+          <a href="#" aria-label="Facebook" style="width:34px;height:34px;background:var(--s2);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:var(--txt2);text-decoration:none;transition:border-color .2s,color .2s,transform .15s cubic-bezier(.34,1.56,.64,1);" onmouseover="this.style.borderColor='var(--acc)';this.style.color='var(--acc)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)';this.style.color='var(--txt2)';this.style.transform='none'"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Instagram" style="width:34px;height:34px;background:var(--s2);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:var(--txt2);text-decoration:none;transition:border-color .2s,color .2s,transform .15s cubic-bezier(.34,1.56,.64,1);" onmouseover="this.style.borderColor='var(--acc)';this.style.color='var(--acc)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)';this.style.color='var(--txt2)';this.style.transform='none'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+          <a href="#" aria-label="LinkedIn" style="width:34px;height:34px;background:var(--s2);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:var(--txt2);text-decoration:none;transition:border-color .2s,color .2s,transform .15s cubic-bezier(.34,1.56,.64,1);" onmouseover="this.style.borderColor='var(--acc)';this.style.color='var(--acc)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)';this.style.color='var(--txt2)';this.style.transform='none'"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.05);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <p style="color:var(--txt3);font-size:.78rem;">© 2024 Darax S.A. Todos los derechos reservados.</p>
+      <div style="display:flex;gap:2rem;">
+        <a href="#" style="color:var(--txt3);font-size:.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--txt2)'" onmouseout="this.style.color='var(--txt3)'">Privacidad</a>
+        <a href="#" style="color:var(--txt3);font-size:.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--txt2)'" onmouseout="this.style.color='var(--txt3)'">Términos</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, { passive: true });
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('in'), i * 55); obs.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+  document.querySelectorAll('.rev').forEach(el => obs.observe(el));
+  function handleSubmit(e) { e.preventDefault(); document.getElementById('cform').style.display = 'none'; document.getElementById('fsuccess').style.display = 'block'; }
+</script>
+</body>
+</html>
