@@ -374,11 +374,13 @@ function Hero() {
       background:BASE, overflow:'hidden',
       display:'flex', alignItems:'center',
     }}>
-      {/* Background image */}
-      <img src="./balanza.png" alt="" aria-hidden="true" style={{
+      {/* Background video */}
+      <video autoPlay muted loop playsInline aria-hidden="true" style={{
         position:'absolute', inset:0, width:'100%', height:'100%',
         objectFit:'cover', objectPosition:'center', opacity:0.6,
-      }}/>
+      }}>
+        <source src="./balanzavideo.mp4" type="video/mp4"/>
+      </video>
 
       {/* Left-side dark gradient */}
       <div style={{
@@ -624,11 +626,22 @@ const LABEL_STYLE = {
 const focusIn  = e => e.target.style.borderColor = 'rgba(201,168,76,0.4)';
 const focusOut = e => e.target.style.borderColor = 'rgba(201,168,76,0.15)';
 
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNpQBmO4oA4f7BUMeB3QYtdZ7GlKKZp_3m1yPBmE9ns_L3Dd2fxhcPp0QvIl1lSjWA/exec';
+
 function ContactoSection() {
   const [form, setForm]     = useState({ nombre:'', contacto:'', desc:'' });
   const [sent, setSent]     = useState(false);
+  const [loading, setLoading] = useState(false);
   const [hovBtn, setHovBtn] = useState(false);
   const upd = k => e => setForm(p => ({ ...p, [k]: e.target.value }));
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    setLoading(true);
+    const params = new URLSearchParams({ nombre: form.nombre, contacto: form.contacto, desc: form.desc });
+    fetch(`${SCRIPT_URL}?${params}`, { method: 'GET', mode: 'no-cors' })
+      .finally(() => { setLoading(false); setSent(true); });
+  };
 
   return (
     <section id="contacto" style={{ background:SECT, padding:'clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem)' }}>
@@ -694,7 +707,7 @@ function ContactoSection() {
               <p style={{ fontFamily:'Outfit,sans-serif', fontSize:13, color:MUTED }}>Nos pondremos en contacto a la brevedad.</p>
             </div>
           ) : (
-            <form onSubmit={e=>{ e.preventDefault(); setSent(true); }} style={{ display:'flex', flexDirection:'column', gap:'1.25rem' }}>
+            <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection:'column', gap:'1.25rem' }}>
               <div>
                 <label style={LABEL_STYLE}>Nombre completo *</label>
                 <input type="text" required
@@ -722,8 +735,9 @@ function ContactoSection() {
                 padding:'16px', display:'flex', alignItems:'center',
                 justifyContent:'center', gap:8,
                 transition:'background 0.3s',
-              }} onMouseEnter={()=>setHovBtn(true)} onMouseLeave={()=>setHovBtn(false)}>
-                Enviar consulta <IconArrow/>
+              }} onMouseEnter={()=>setHovBtn(true)} onMouseLeave={()=>setHovBtn(false)}
+              disabled={loading}>
+                {loading ? 'Enviando…' : <> Enviar consulta <IconArrow/> </>}
               </button>
             </form>
           )}
