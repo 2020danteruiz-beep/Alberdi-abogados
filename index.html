@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estudio Jurídico Alberdi — Gral. Roca, Río Negro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: '#c9a84c',
+            'gold-hover': '#e8c97a',
+            base: '#111111',
+            elevated: '#181818',
+            section: '#151515',
+            'text-primary': '#f0e6d0',
+            'text-secondary': '#e8ddc8',
+            'text-muted': '#8a7d6a',
+          },
+          fontFamily: {
+            cormorant: ['"Cormorant Garamond"', 'serif'],
+            outfit: ['Outfit', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #111111; color: #e8ddc8; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+
+    /* ── Responsive utilities ────────────────────────── */
+    .show-mobile  { display: block; }
+    .show-desktop { display: none; }
+    .show-desktop-flex { display: none; }
+    .nav-links    { display: none; }
+    .hero-grid    { grid-template-columns: 1fr; }
+
+    @media (min-width: 768px) {
+      .show-mobile       { display: none !important; }
+      .show-desktop      { display: block !important; }
+      .show-desktop-flex { display: flex !important; }
+      .nav-links         { display: flex !important; }
+      .hero-grid         { grid-template-columns: 1fr auto; }
+    }
+
+    /* ── Animations ──────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.45; transform: scale(0.75); }
+    }
+    .fade-up { animation: fadeUp 0.8s ease forwards; opacity: 0; }
+    .d0  { animation-delay: 0s;   }
+    .d1  { animation-delay: 0.1s; }
+    .d2  { animation-delay: 0.2s; }
+    .d3  { animation-delay: 0.3s; }
+    .d4  { animation-delay: 0.4s; }
+    .d5  { animation-delay: 0.5s; }
+    .pulse-dot { animation: pulseDot 2s infinite; }
+
+    /* ── Glass card ──────────────────────────────────── */
+    .glass-card {
+      background: rgba(255,255,255,0.01);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.08);
+      position: relative;
+    }
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 1.4px;
+      background: linear-gradient(180deg, rgba(201,168,76,0.5) 0%, transparent 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ── Area card hover ─────────────────────────────── */
+    .area-card {
+      position: relative;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1),
+                  border-color 0.4s ease;
+      overflow: hidden;
+    }
+    .area-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: #c9a84c;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+    }
+    .area-card:hover { transform: translateY(-4px); border-color: rgba(201,168,76,0.28) !important; }
+    .area-card:hover::after { transform: scaleX(1); }
+
+    /* ── Inputs ──────────────────────────────────────── */
+    input::placeholder, textarea::placeholder { color: #8a7d6a; opacity: 0.6; }
+    select option { background: #181818; color: #e8ddc8; }
+
+    /* ── Scrollbar ───────────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #111111; }
+    ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.25); border-radius: 3px; }
+
+    /* ── Areas grid symmetric ────────────────────────── */
+    .areas-grid { display: grid; grid-template-columns: 1fr; gap: 1px; }
+    @media (min-width: 600px) { .areas-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 960px) { .areas-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    /* ── Scroll progress bar ─────────────────────────── */
+    #scroll-bar {
+      position: fixed; top: 0; left: 0; z-index: 999;
+      height: 2px;
+      background: linear-gradient(to right, #c9a84c, #e8c97a);
+      pointer-events: none;
+      transform-origin: left;
+      will-change: width;
+    }
+
+    /* ── Scroll reveal ───────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    .reveal.dl1 { transition-delay: 0.10s; }
+    .reveal.dl2 { transition-delay: 0.20s; }
+    .reveal.dl3 { transition-delay: 0.30s; }
+    .reveal.dl4 { transition-delay: 0.40s; }
+    .reveal.dl5 { transition-delay: 0.50s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up, .pulse-dot { animation: none; opacity: 1; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+/* ── Shared tokens ─────────────────────────────────── */
+const GOLD   = '#c9a84c';
+const BASE   = '#111111';
+const ELEV   = '#181818';
+const SECT   = '#151515';
+const MUTED  = '#8a7d6a';
+const PRIM   = '#f0e6d0';
+const SEC    = '#e8ddc8';
+
+/* ── Inline SVG icons ──────────────────────────────── */
+const IconArrow = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/>
+    <polyline points="12 5 19 12 12 19"/>
+  </svg>
+);
+const IconMenu = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+       stroke={GOLD} strokeWidth="2" strokeLinecap="round">
+    <line x1="3" y1="6"  x2="21" y2="6"/>
+    <line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+);
+const IconX = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+       stroke={GOLD} strokeWidth="2" strokeLinecap="round">
+    <line x1="18" y1="6"  x2="6"  y2="18"/>
+    <line x1="6"  y1="6"  x2="18" y2="18"/>
+  </svg>
+);
+
+/* ── Scroll progress bar ──────────────────────────── */
+function ScrollProgress() {
+  const [pct, setPct] = useState(0);
+  useEffect(() => {
+    const update = () => {
+      const el = document.documentElement;
+      const scrolled = el.scrollTop || document.body.scrollTop;
+      const total = el.scrollHeight - el.clientHeight;
+      setPct(total > 0 ? (scrolled / total) * 100 : 0);
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, []);
+  return <div id="scroll-bar" style={{ width: `${pct}%` }}/>;
+}
+
+/* ── Eyebrow row ───────────────────────────────────── */
+const Eyebrow = ({ label, centered }) => (
+  <div style={{ display:'flex', alignItems:'center', gap:'1rem', marginBottom:'0.875rem',
+                justifyContent: centered ? 'center' : 'flex-start' }}>
+    <div style={{ width:40, height:1, background:GOLD, flexShrink:0 }}/>
+    <span style={{ fontFamily:'Outfit,sans-serif', fontSize:11, color:GOLD,
+                   textTransform:'uppercase', letterSpacing:'0.3em' }}>{label}</span>
+    {centered && <div style={{ width:40, height:1, background:GOLD, flexShrink:0 }}/>}
+  </div>
+);
+
+/* ── CTA — filled gold ─────────────────────────────── */
+const BtnGold = ({ href, children }) => {
+  const [hov, setHov] = useState(false);
+  return (
+    <a href={href} style={{
+      display:'inline-flex', alignItems:'center', gap:8,
+      background: hov ? '#e8c97a' : GOLD,
+      color: BASE, textDecoration:'none',
+      fontFamily:'Outfit,sans-serif', fontSize:11, fontWeight:600,
+      textTransform:'uppercase', letterSpacing:'0.25em',
+      padding:'14px 28px',
+      transition:'background 0.3s',
+    }} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
+      {children}
+    </a>
+  );
+};
+
+/* ── CTA — ghost ───────────────────────────────────── */
+const BtnGhost = ({ href, children }) => {
+  const [hov, setHov] = useState(false);
+  return (
+    <a href={href} style={{
+      display:'inline-flex', alignItems:'center', gap:8,
+      background:'transparent', textDecoration:'none',
+      fontFamily:'Outfit,sans-serif', fontSize:11, fontWeight:400,
+      textTransform:'uppercase', letterSpacing:'0.25em',
+      padding:'14px 28px',
+      border: hov ? `1px solid ${GOLD}` : '1px solid rgba(201,168,76,0.3)',
+      color: hov ? GOLD : MUTED,
+      transition:'all 0.3s',
+    }} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
+      {children}
+    </a>
+  );
+};
+
+/* ═══════════════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════════════ */
+function Navbar({ logoSrc }) {
+  const [open, setOpen]     = useState(false);
+  const [err,  setErr]      = useState(false);
+  const [hovCta, setHovCta] = useState(false);
+
+  const LINKS = [
+    { label:'ÁREAS',    href:'#areas'    },
+    { label:'NOSOTROS', href:'#nosotros' },
+    { label:'CONTACTO', href:'#contacto' },
+  ];
+
+  const Logo = ({ h }) => err
+    ? <span style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:20, color:GOLD, fontWeight:400 }}>Alberdi</span>
+    : <img src={logoSrc} alt="Estudio Jurídico Alberdi" onError={()=>setErr(true)}
+           style={{ height:h, objectFit:'contain', display:'block' }} />;
+
+  return (
+    <>
+      <header style={{
+        position:'fixed', top:0, left:0, right:0, zIndex:100,
+        height:72, display:'flex', alignItems:'center',
+        justifyContent:'space-between',
+        padding:'0 clamp(1.5rem,5vw,4rem)',
+        background:'rgba(17,17,17,0.88)',
+        backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)',
+        borderBottom:'1px solid rgba(201,168,76,0.12)',
+      }}>
+        {/* Logo + subtitle */}
+        <div style={{ display:'flex', flexDirection:'column' }}>
+          <div className="show-desktop"><Logo h={40}/></div>
+          <div className="show-mobile"><Logo h={32}/></div>
+          <span className="show-desktop" style={{
+            fontFamily:'Outfit,sans-serif', fontSize:10, color:MUTED,
+            textTransform:'uppercase', letterSpacing:'0.3em', marginTop:3,
+          }}>Estudio Jurídico</span>
+        </div>
+
+        {/* Desktop nav */}
+        <nav className="nav-links" style={{ gap:'2.5rem', alignItems:'center' }}>
+          {LINKS.map(l => {
+            const [hov, setHov] = useState(false);
+            return (
+              <a key={l.label} href={l.href} style={{
+                fontFamily:'Outfit,sans-serif', fontSize:12, textDecoration:'none',
+                textTransform:'uppercase', letterSpacing:'0.2em',
+                color: hov ? GOLD : MUTED,
+                transition:'color 0.3s',
+              }} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
+                {l.label}
+              </a>
+            );
+          })}
+          <a href="#contacto" style={{
+            fontFamily:'Outfit,sans-serif', fontSize:11, textDecoration:'none',
+            textTransform:'uppercase', letterSpacing:'0.2em',
+            padding:'8px 20px',
+            background: hovCta ? GOLD : 'transparent',
+            color: hovCta ? BASE : GOLD,
+            border:`1px solid ${GOLD}`,
+            transition:'all 0.3s',
+          }} onMouseEnter={()=>setHovCta(true)} onMouseLeave={()=>setHovCta(false)}>
+            Consultar ahora
+          </a>
+        </nav>
+
+        {/* Mobile hamburger */}
+        <button className="show-mobile" onClick={()=>setOpen(true)}
+          style={{ background:'none', border:'none', cursor:'pointer', padding:4 }}>
+          <IconMenu/>
+        </button>
+      </header>
+
+      {/* Mobile overlay */}
+      {open && (
+        <div style={{
+          position:'fixed', inset:0, zIndex:200,
+          background:'rgba(17,17,17,0.97)',
+          display:'flex', flexDirection:'column',
+          alignItems:'center', justifyContent:'center',
+        }}>
+          <button onClick={()=>setOpen(false)} style={{
+            position:'absolute', top:20, right:20,
+            background:'none', border:'none', cursor:'pointer',
+          }}><IconX/></button>
+          <div style={{ marginBottom:'3rem' }}><Logo h={32}/></div>
+          <nav style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:'2rem' }}>
+            {LINKS.map(l => (
+              <a key={l.label} href={l.href} onClick={()=>setOpen(false)} style={{
+                fontFamily:'"Cormorant Garamond",serif', fontSize:'2rem', fontWeight:300,
+                color:SEC, textDecoration:'none', transition:'color 0.3s',
+              }}
+              onMouseEnter={e=>e.target.style.color=GOLD}
+              onMouseLeave={e=>e.target.style.color=SEC}>
+                {l.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ */
+function Hero() {
+  return (
+    <section style={{
+      position:'relative', minHeight:'100dvh',
+      background:BASE, overflow:'hidden',
+      display:'flex', alignItems:'center',
+    }}>
+      {/* Background image */}
+      <img src="./balanza.png" alt="" aria-hidden="true" style={{
+        position:'absolute', inset:0, width:'100%', height:'100%',
+        objectFit:'cover', objectPosition:'center', opacity:0.6,
+      }}/>
+
+      {/* Left-side dark gradient */}
+      <div style={{
+        position:'absolute', inset:0,
+        background:'linear-gradient(to right, #111111 0%, #111111 25%, rgba(17,17,17,0.7) 55%, transparent 100%)',
+      }}/>
+
+      {/* Bottom gradient */}
+      <div style={{
+        position:'absolute', bottom:0, left:0, right:0, height:320,
+        background:'linear-gradient(to top, #111111 0%, transparent 100%)',
+      }}/>
+
+      {/* Noise texture */}
+      <svg aria-hidden="true" style={{ position:'absolute', inset:0, width:'100%', height:'100%', opacity:0.04, pointerEvents:'none' }}>
+        <filter id="noise-filter">
+          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noise-filter)"/>
+      </svg>
+
+      {/* Vertical grid lines — desktop only */}
+      <div className="show-desktop" style={{ position:'absolute', inset:0, pointerEvents:'none' }}>
+        {[25,50,75].map(pct => (
+          <div key={pct} style={{
+            position:'absolute', top:0, bottom:0, left:`${pct}%`,
+            width:1, background:'rgba(255,255,255,0.10)',
+          }}/>
+        ))}
+      </div>
+
+      {/* Gold ellipse glow — top center */}
+      <svg aria-hidden="true" style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', pointerEvents:'none', width:600, height:200 }}>
+        <defs>
+          <filter id="glow-blur">
+            <feGaussianBlur stdDeviation="25"/>
+          </filter>
+        </defs>
+        <ellipse cx="300" cy="0" rx="200" ry="90" fill="#c9a84c" opacity="0.18" filter="url(#glow-blur)"/>
+      </svg>
+
+      {/* Content grid */}
+      <div className="hero-grid" style={{
+        position:'relative', zIndex:2,
+        display:'grid', gap:'3rem',
+        width:'100%', maxWidth:1400,
+        margin:'0 auto',
+        padding:'100px clamp(1.5rem,5vw,4rem) 5rem',
+        alignItems:'center',
+      }}>
+
+        {/* LEFT: text */}
+        <div style={{ maxWidth:560 }}>
+          {/* Eyebrow */}
+          <div className="fade-up d0" style={{ display:'flex', alignItems:'center', gap:'1rem', marginBottom:'1.5rem' }}>
+            <div style={{ width:40, height:1, background:GOLD, flexShrink:0 }}/>
+            <span style={{ fontFamily:'Outfit,sans-serif', fontSize:11, color:GOLD, textTransform:'uppercase', letterSpacing:'0.3em' }}>
+              Estudio Jurídico · Gral. Roca, Río Negro
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h1 className="fade-up d1" style={{
+            fontFamily:'"Cormorant Garamond",serif',
+            fontWeight:300,
+            fontSize:'clamp(3rem,5vw,5.5rem)',
+            color:PRIM, lineHeight:1.08,
+            letterSpacing:'-0.02em',
+            marginBottom:'1.5rem',
+          }}>
+            Defensa legal con{' '}
+            <em style={{ fontStyle:'italic', color:GOLD }}>criterio</em>
+            {' '}y experiencia
+            <span style={{ color:GOLD }}>.</span>
+          </h1>
+
+          {/* Divider */}
+          <div className="fade-up d2" style={{ width:60, height:1, background:'rgba(201,168,76,0.35)', marginBottom:'1.5rem' }}/>
+
+          {/* Description */}
+          <p className="fade-up d3" style={{
+            fontFamily:'Outfit,sans-serif', fontSize:15, color:MUTED,
+            maxWidth:440, lineHeight:1.8, marginBottom:'2rem',
+          }}>
+            En Estudio Alberdi brindamos asesoramiento jurídico integral con profesionalismo,
+            dedicación y trato personalizado. Porque cada caso importa.
+          </p>
+
+          {/* CTAs */}
+          <div className="fade-up d4" style={{ display:'flex', flexWrap:'wrap', gap:'1rem', marginBottom:'2.5rem' }}>
+            <BtnGold href="#contacto">Consulta gratuita <IconArrow/></BtnGold>
+            <BtnGhost href="#areas">Ver áreas de práctica</BtnGhost>
+          </div>
+
+          {/* Stats */}
+          <div className="fade-up d5" style={{
+            borderTop:'1px solid rgba(201,168,76,0.10)',
+            paddingTop:'1.5rem',
+            display:'flex', flexWrap:'wrap', gap:'2.5rem',
+          }}>
+            {[
+              { val:'España 1802', lbl:'General Roca, Río Negro' },
+              { val:'6+',          lbl:'Áreas de práctica'       },
+            ].map(s => (
+              <div key={s.lbl}>
+                <div style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'1.5rem', fontWeight:300, color:GOLD }}>{s.val}</div>
+                <div style={{ fontFamily:'Outfit,sans-serif', fontSize:11, color:MUTED, textTransform:'uppercase', letterSpacing:'0.15em', marginTop:3 }}>{s.lbl}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   ÁREAS DE PRÁCTICA
+═══════════════════════════════════════════════════ */
+const AREAS = [
+  { n:'01', title:'Derecho Civil',           desc:'Contratos, obligaciones, responsabilidad civil y derechos reales.' },
+  { n:'02', title:'Derecho de Familia',      desc:'Divorcios, tenencia, alimentos, adopciones y sucesiones.' },
+  { n:'03', title:'Derecho Penal',           desc:'Defensa y representación en causas penales con plena dedicación.' },
+  { n:'04', title:'Derecho Laboral',         desc:'Accidentes, despidos, indemnizaciones y relaciones laborales.' },
+  { n:'05', title:'Derecho Inmobiliario',    desc:'Compraventas, locaciones, posesión y regularización dominial.' },
+  { n:'06', title:'Asesoramiento Integral',  desc:'Consultoría jurídica preventiva y gestión legal empresarial.' },
+];
+
+function AreasSection() {
+  return (
+    <section id="areas" style={{ background:SECT, padding:'clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem)' }}>
+      <div style={{ maxWidth:1200, margin:'0 auto' }}>
+        <div className="reveal" style={{ marginBottom:'3.5rem', textAlign:'center' }}>
+          <Eyebrow label="Práctica jurídica" centered/>
+          <h2 style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'clamp(2rem,3.5vw,3rem)', fontWeight:300, color:PRIM }}>
+            Derecho en todas sus <em style={{ fontStyle:'italic', color:GOLD }}>dimensiones</em>
+          </h2>
+        </div>
+
+        <div className="areas-grid">
+          {AREAS.map((a, i) => (
+            <div key={a.n} className={`area-card reveal dl${(i % 3) + 1}`} style={{
+              background:ELEV,
+              border:'1px solid rgba(201,168,76,0.08)',
+              padding:'2rem 1.75rem',
+              cursor:'default',
+            }}>
+              <div style={{
+                position:'absolute', top:'1rem', right:'1.25rem',
+                fontFamily:'"Cormorant Garamond",serif', fontSize:'3.5rem', fontWeight:300,
+                color:GOLD, opacity:0.06, lineHeight:1, userSelect:'none', pointerEvents:'none',
+              }}>{a.n}</div>
+              <div style={{ width:28, height:1, background:'rgba(201,168,76,0.4)', marginBottom:'1.25rem' }}/>
+              <h3 style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'1.4rem', fontWeight:400, color:PRIM, marginBottom:'0.625rem' }}>{a.title}</h3>
+              <p  style={{ fontFamily:'Outfit,sans-serif', fontSize:13, color:MUTED, lineHeight:1.7 }}>{a.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   NOSOTROS
+═══════════════════════════════════════════════════ */
+function NosotrosSection() {
+  return (
+    <section id="nosotros" style={{ background:'#111111', padding:'clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem)' }}>
+      <div style={{
+        maxWidth:1200, margin:'0 auto',
+        display:'grid',
+        gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',
+        gap:'4rem', alignItems:'center',
+      }}>
+        {/* Left */}
+        <div className="reveal">
+          <img src="./logo.png" alt="Estudio Jurídico Alberdi"
+               style={{ height:44, objectFit:'contain', marginBottom:'1.75rem', opacity:0.9, display:'block' }}/>
+          <Eyebrow label="El estudio"/>
+          <h2 style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'clamp(2rem,3.5vw,3rem)', fontWeight:300, color:PRIM, lineHeight:1.2, marginBottom:'1.5rem' }}>
+            Trayectoria al servicio de{' '}
+            <em style={{ fontStyle:'italic', color:GOLD }}>sus intereses</em>.
+          </h2>
+          <p style={{ fontFamily:'Outfit,sans-serif', fontSize:15, color:MUTED, lineHeight:1.8, marginBottom:'1.25rem' }}>
+            Ubicado en España 1802, General Roca, Río Negro, el Estudio Jurídico Alberdi brinda
+            servicios legales integrales con un enfoque personalizado, entendiendo que cada
+            situación merece atención exclusiva y estratégica.
+          </p>
+          <p style={{ fontFamily:'Outfit,sans-serif', fontSize:15, color:MUTED, lineHeight:1.8, marginBottom:'2.5rem' }}>
+            Nuestro compromiso es acompañar a cada cliente durante todo el proceso legal,
+            con transparencia, profesionalismo y dedicación absoluta. La confianza es el
+            pilar de nuestra relación.
+          </p>
+          <BtnGold href="#contacto">Agendar consulta <IconArrow/></BtnGold>
+        </div>
+
+        {/* Right: stat grid */}
+        <div className="reveal dl2" style={{
+          display:'grid', gridTemplateColumns:'1fr 1fr',
+          gap:1, background:'rgba(201,168,76,0.08)',
+        }}>
+          {[
+            { val:'100%',         lbl:'Dedicación al cliente' },
+            { val:'General Roca', lbl:'España 1802'           },
+          ].map(s => (
+            <div key={s.lbl} style={{
+              background:ELEV,
+              border:'1px solid rgba(201,168,76,0.10)',
+              padding:'2.5rem 1.5rem',
+              display:'flex', flexDirection:'column',
+              alignItems:'center', justifyContent:'center', textAlign:'center',
+            }}>
+              <div style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'2rem', fontWeight:300, color:GOLD }}>{s.val}</div>
+              <div style={{ fontFamily:'Outfit,sans-serif', fontSize:11, color:MUTED, textTransform:'uppercase', letterSpacing:'0.15em', marginTop:6 }}>{s.lbl}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   CONTACTO
+═══════════════════════════════════════════════════ */
+const INPUT_BASE = {
+  width:'100%',
+  background:'rgba(255,255,255,0.02)',
+  border:'1px solid rgba(201,168,76,0.15)',
+  color:SEC,
+  fontFamily:'Outfit,sans-serif', fontSize:14,
+  padding:'12px 16px',
+  outline:'none',
+  transition:'border-color 0.3s',
+  appearance:'none',
+};
+const LABEL_STYLE = {
+  fontFamily:'Outfit,sans-serif', fontSize:11, color:MUTED,
+  textTransform:'uppercase', letterSpacing:'0.15em',
+  display:'block', marginBottom:8,
+};
+const focusIn  = e => e.target.style.borderColor = 'rgba(201,168,76,0.4)';
+const focusOut = e => e.target.style.borderColor = 'rgba(201,168,76,0.15)';
+
+function ContactoSection() {
+  const [form, setForm]     = useState({ nombre:'', contacto:'', desc:'' });
+  const [sent, setSent]     = useState(false);
+  const [hovBtn, setHovBtn] = useState(false);
+  const upd = k => e => setForm(p => ({ ...p, [k]: e.target.value }));
+
+  return (
+    <section id="contacto" style={{ background:SECT, padding:'clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem)' }}>
+      <div style={{
+        maxWidth:1200, margin:'0 auto',
+        display:'grid',
+        gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',
+        gap:'4rem',
+      }}>
+        {/* Left */}
+        <div className="reveal">
+          <img src="./logo.png" alt="Estudio Jurídico Alberdi"
+               style={{ height:40, objectFit:'contain', marginBottom:'1.75rem', opacity:0.85, display:'block' }}/>
+          <Eyebrow label="Contacto"/>
+          <h2 style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'clamp(2rem,3.5vw,3rem)', fontWeight:300, color:PRIM, lineHeight:1.2, marginBottom:'1.25rem' }}>
+            ¿Necesita asesoramiento{' '}
+            <em style={{ fontStyle:'italic', color:GOLD }}>legal</em>?
+          </h2>
+          <p style={{ fontFamily:'Outfit,sans-serif', fontSize:15, color:MUTED, lineHeight:1.8, marginBottom:'2.5rem' }}>
+            Contáctenos para una consulta inicial gratuita. Evaluaremos su situación con
+            criterio profesional y le orientaremos sobre los pasos a seguir.
+          </p>
+
+          {[
+            {
+              icon: (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                  <circle cx="12" cy="9" r="2.5"/>
+                </svg>
+              ),
+              main:'España 1802, General Roca', sub:'Río Negro'
+            },
+            {
+              icon: (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/>
+                </svg>
+              ),
+              main:'0298 443-4416', sub:'Lunes a viernes · 8:00 a 18:00 hs'
+            },
+          ].map((c,i) => (
+            <div key={i} style={{ display:'flex', gap:'1rem', marginBottom:'1.25rem' }}>
+              <div style={{
+                width:32, height:32, flexShrink:0,
+                border:'1px solid rgba(201,168,76,0.25)',
+                display:'flex', alignItems:'center', justifyContent:'center',
+              }}>{c.icon}</div>
+              <div>
+                <div style={{ fontFamily:'Outfit,sans-serif', fontSize:14, color:SEC }}>{c.main}</div>
+                {c.sub && <div style={{ fontFamily:'Outfit,sans-serif', fontSize:12, color:MUTED, marginTop:2 }}>{c.sub}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Right: form */}
+        <div className="reveal dl2">
+          {sent ? (
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', height:'100%', gap:'1rem', textAlign:'center', padding:'3rem 0' }}>
+              <div style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'2rem', color:GOLD }}>✓</div>
+              <p style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'1.4rem', color:PRIM }}>Consulta enviada</p>
+              <p style={{ fontFamily:'Outfit,sans-serif', fontSize:13, color:MUTED }}>Nos pondremos en contacto a la brevedad.</p>
+            </div>
+          ) : (
+            <form onSubmit={e=>{ e.preventDefault(); setSent(true); }} style={{ display:'flex', flexDirection:'column', gap:'1.25rem' }}>
+              <div>
+                <label style={LABEL_STYLE}>Nombre completo *</label>
+                <input type="text" required
+                  value={form.nombre} onChange={upd('nombre')}
+                  style={INPUT_BASE} onFocus={focusIn} onBlur={focusOut}/>
+              </div>
+              <div>
+                <label style={LABEL_STYLE}>Teléfono o email *</label>
+                <input type="text" required placeholder="0298 000-0000 o correo@ejemplo.com"
+                  value={form.contacto} onChange={upd('contacto')}
+                  style={INPUT_BASE} onFocus={focusIn} onBlur={focusOut}/>
+              </div>
+              <div>
+                <label style={LABEL_STYLE}>Descripción</label>
+                <textarea value={form.desc} onChange={upd('desc')}
+                  placeholder="Describa brevemente su consulta…"
+                  style={{ ...INPUT_BASE, height:120, resize:'vertical' }}
+                  onFocus={focusIn} onBlur={focusOut}/>
+              </div>
+              <button type="submit" style={{
+                background: hovBtn ? '#e8c97a' : GOLD,
+                color:BASE, border:'none', cursor:'pointer',
+                fontFamily:'Outfit,sans-serif', fontSize:11, fontWeight:600,
+                textTransform:'uppercase', letterSpacing:'0.25em',
+                padding:'16px', display:'flex', alignItems:'center',
+                justifyContent:'center', gap:8,
+                transition:'background 0.3s',
+              }} onMouseEnter={()=>setHovBtn(true)} onMouseLeave={()=>setHovBtn(false)}>
+                Enviar consulta <IconArrow/>
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+function Footer({ logoSrc }) {
+  const [err, setErr] = useState(false);
+  return (
+    <footer style={{
+      background:BASE,
+      borderTop:'1px solid rgba(201,168,76,0.10)',
+      padding:'3rem clamp(1.5rem,5vw,4rem)',
+      textAlign:'center',
+    }}>
+      {err
+        ? <div style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:20, color:GOLD, marginBottom:8 }}>Alberdi</div>
+        : <img src={logoSrc} alt="Estudio Jurídico Alberdi" onError={()=>setErr(true)}
+               style={{ height:36, objectFit:'contain', margin:'0 auto 8px', display:'block' }}/>}
+      <div style={{ fontFamily:'Outfit,sans-serif', fontSize:10, color:MUTED, textTransform:'uppercase', letterSpacing:'0.3em', marginBottom:'1.5rem' }}>
+        Estudio Jurídico
+      </div>
+
+      {/* Ornament */}
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'1rem', marginBottom:'1.5rem' }}>
+        <div style={{ width:60, height:1, background:GOLD, opacity:0.35 }}/>
+        <div style={{ width:6, height:6, background:GOLD, transform:'rotate(45deg)', opacity:0.55 }}/>
+        <div style={{ width:60, height:1, background:GOLD, opacity:0.35 }}/>
+      </div>
+
+      <p style={{ fontFamily:'Outfit,sans-serif', fontSize:11, color:MUTED, opacity:0.5 }}>
+        © 2025 Estudio Jurídico Alberdi · Todos los derechos reservados
+      </p>
+    </footer>
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   APP ROOT
+═══════════════════════════════════════════════════ */
+function App() {
+  const logoSrc = './logo.png';
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          obs.unobserve(e.target);
+        }
+      }),
+      { threshold: 0.10 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <>
+      <ScrollProgress/>
+      <Navbar logoSrc={logoSrc}/>
+      <main>
+        <Hero/>
+        <AreasSection/>
+        <NosotrosSection/>
+        <ContactoSection/>
+      </main>
+      <Footer logoSrc={logoSrc}/>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
