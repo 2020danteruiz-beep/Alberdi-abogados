@@ -13,14 +13,14 @@
       theme: {
         extend: {
           colors: {
-            gold: '#c9a84c',
-            'gold-hover': '#e8c97a',
-            base: '#111111',
-            elevated: '#181818',
-            section: '#151515',
-            'text-primary': '#f0e6d0',
-            'text-secondary': '#e8ddc8',
-            'text-muted': '#8a7d6a',
+            gold: '#4a7d8e',
+            'gold-hover': '#3a6475',
+            base: '#ffffff',
+            elevated: '#f4f8f9',
+            section: '#eaf0f2',
+            'text-primary': '#1a2e35',
+            'text-secondary': '#2d4a55',
+            'text-muted': '#6b8a94',
           },
           fontFamily: {
             cormorant: ['"Cormorant Garamond"', 'serif'],
@@ -36,7 +36,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: #111111; color: #e8ddc8; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+    body { background: #ffffff; color: #2d4a55; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
 
     /* ── Responsive utilities ────────────────────────── */
     .show-mobile  { display: block; }
@@ -84,7 +84,7 @@
       position: absolute;
       inset: 0;
       padding: 1.4px;
-      background: linear-gradient(180deg, rgba(201,168,76,0.5) 0%, transparent 100%);
+      background: linear-gradient(180deg, rgba(74,125,142,0.5) 0%, transparent 100%);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
@@ -104,22 +104,22 @@
       position: absolute;
       bottom: 0; left: 0; right: 0;
       height: 2px;
-      background: #c9a84c;
+      background: #4a7d8e;
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
     }
-    .area-card:hover { transform: translateY(-4px); border-color: rgba(201,168,76,0.28) !important; }
+    .area-card:hover { transform: translateY(-4px); border-color: rgba(74,125,142,0.35) !important; }
     .area-card:hover::after { transform: scaleX(1); }
 
     /* ── Inputs ──────────────────────────────────────── */
-    input::placeholder, textarea::placeholder { color: #8a7d6a; opacity: 0.6; }
-    select option { background: #181818; color: #e8ddc8; }
+    input::placeholder, textarea::placeholder { color: #6b8a94; opacity: 0.7; }
+    select option { background: #f4f8f9; color: #1a2e35; }
 
     /* ── Scrollbar ───────────────────────────────────── */
     ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: #111111; }
-    ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.25); border-radius: 3px; }
+    ::-webkit-scrollbar-track { background: #f4f8f9; }
+    ::-webkit-scrollbar-thumb { background: rgba(74,125,142,0.35); border-radius: 3px; }
 
     /* ── Areas grid symmetric ────────────────────────── */
     .areas-grid { display: grid; grid-template-columns: 1fr; gap: 1px; }
@@ -130,7 +130,7 @@
     #scroll-bar {
       position: fixed; top: 0; left: 0; z-index: 999;
       height: 2px;
-      background: linear-gradient(to right, #c9a84c, #e8c97a);
+      background: linear-gradient(to right, #4a7d8e, #3a6475);
       pointer-events: none;
       transform-origin: left;
       will-change: width;
@@ -162,13 +162,13 @@
 const { useState, useEffect } = React;
 
 /* ── Shared tokens ─────────────────────────────────── */
-const GOLD   = '#c9a84c';
-const BASE   = '#111111';
-const ELEV   = '#181818';
-const SECT   = '#151515';
-const MUTED  = '#8a7d6a';
-const PRIM   = '#f0e6d0';
-const SEC    = '#e8ddc8';
+const GOLD   = '#4a7d8e';
+const BASE   = '#ffffff';
+const ELEV   = '#f4f8f9';
+const SECT   = '#eaf0f2';
+const MUTED  = '#6b8a94';
+const PRIM   = '#1a2e35';
+const SEC    = '#2d4a55';
 
 /* ── Inline SVG icons ──────────────────────────────── */
 const IconArrow = () => (
@@ -227,7 +227,7 @@ const BtnGold = ({ href, children }) => {
   return (
     <a href={href} style={{
       display:'inline-flex', alignItems:'center', gap:8,
-      background: hov ? '#e8c97a' : GOLD,
+      background: hov ? '#3a6475' : GOLD,
       color: BASE, textDecoration:'none',
       fontFamily:'Outfit,sans-serif', fontSize:11, fontWeight:600,
       textTransform:'uppercase', letterSpacing:'0.25em',
@@ -249,7 +249,7 @@ const BtnGhost = ({ href, children }) => {
       fontFamily:'Outfit,sans-serif', fontSize:11, fontWeight:400,
       textTransform:'uppercase', letterSpacing:'0.25em',
       padding:'14px 28px',
-      border: hov ? `1px solid ${GOLD}` : '1px solid rgba(201,168,76,0.3)',
+      border: hov ? `1px solid ${GOLD}` : '1px solid rgba(74,125,142,0.3)',
       color: hov ? GOLD : MUTED,
       transition:'all 0.3s',
     }} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
@@ -284,9 +284,9 @@ function Navbar({ logoSrc }) {
         height:72, display:'flex', alignItems:'center',
         justifyContent:'space-between',
         padding:'0 clamp(1.5rem,5vw,4rem)',
-        background:'rgba(17,17,17,0.88)',
+        background:'rgba(255,255,255,0.92)',
         backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)',
-        borderBottom:'1px solid rgba(201,168,76,0.12)',
+        borderBottom:'1px solid rgba(74,125,142,0.15)',
       }}>
         {/* Logo + subtitle */}
         <div style={{ display:'flex', flexDirection:'column' }}>
@@ -337,7 +337,7 @@ function Navbar({ logoSrc }) {
       {open && (
         <div style={{
           position:'fixed', inset:0, zIndex:200,
-          background:'rgba(17,17,17,0.97)',
+          background:'rgba(255,255,255,0.97)',
           display:'flex', flexDirection:'column',
           alignItems:'center', justifyContent:'center',
         }}>
@@ -385,13 +385,13 @@ function Hero() {
       {/* Left-side dark gradient */}
       <div style={{
         position:'absolute', inset:0,
-        background:'linear-gradient(to right, #111111 0%, #111111 25%, rgba(17,17,17,0.7) 55%, transparent 100%)',
+        background:'linear-gradient(to right, #ffffff 0%, #ffffff 30%, rgba(255,255,255,0.85) 60%, transparent 100%)',
       }}/>
 
       {/* Bottom gradient */}
       <div style={{
         position:'absolute', bottom:0, left:0, right:0, height:320,
-        background:'linear-gradient(to top, #111111 0%, transparent 100%)',
+        background:'linear-gradient(to top, #ffffff 0%, transparent 100%)',
       }}/>
 
       {/* Noise texture */}
@@ -419,7 +419,7 @@ function Hero() {
             <feGaussianBlur stdDeviation="25"/>
           </filter>
         </defs>
-        <ellipse cx="300" cy="0" rx="200" ry="90" fill="#c9a84c" opacity="0.18" filter="url(#glow-blur)"/>
+        <ellipse cx="300" cy="0" rx="200" ry="90" fill="#4a7d8e" opacity="0.18" filter="url(#glow-blur)"/>
       </svg>
 
       {/* Content grid */}
@@ -458,7 +458,7 @@ function Hero() {
           </h1>
 
           {/* Divider */}
-          <div className="fade-up d2" style={{ width:60, height:1, background:'rgba(201,168,76,0.35)', marginBottom:'1.5rem' }}/>
+          <div className="fade-up d2" style={{ width:60, height:1, background:'rgba(74,125,142,0.35)', marginBottom:'1.5rem' }}/>
 
           {/* Description */}
           <p className="fade-up d3" style={{
@@ -477,7 +477,7 @@ function Hero() {
 
           {/* Stats */}
           <div className="fade-up d5" style={{
-            borderTop:'1px solid rgba(201,168,76,0.10)',
+            borderTop:'1px solid rgba(74,125,142,0.12)',
             paddingTop:'1.5rem',
             display:'flex', flexWrap:'wrap', gap:'2.5rem',
           }}>
@@ -524,7 +524,7 @@ function AreasSection() {
           {AREAS.map((a, i) => (
             <div key={a.n} className={`area-card reveal dl${(i % 3) + 1}`} style={{
               background:ELEV,
-              border:'1px solid rgba(201,168,76,0.08)',
+              border:'1px solid rgba(74,125,142,0.10)',
               padding:'2rem 1.75rem',
               cursor:'default',
             }}>
@@ -533,7 +533,7 @@ function AreasSection() {
                 fontFamily:'"Cormorant Garamond",serif', fontSize:'3.5rem', fontWeight:300,
                 color:GOLD, opacity:0.06, lineHeight:1, userSelect:'none', pointerEvents:'none',
               }}>{a.n}</div>
-              <div style={{ width:28, height:1, background:'rgba(201,168,76,0.4)', marginBottom:'1.25rem' }}/>
+              <div style={{ width:28, height:1, background:'rgba(74,125,142,0.4)', marginBottom:'1.25rem' }}/>
               <h3 style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'1.4rem', fontWeight:400, color:PRIM, marginBottom:'0.625rem' }}>{a.title}</h3>
               <p  style={{ fontFamily:'Outfit,sans-serif', fontSize:13, color:MUTED, lineHeight:1.7 }}>{a.desc}</p>
             </div>
@@ -549,7 +549,7 @@ function AreasSection() {
 ═══════════════════════════════════════════════════ */
 function NosotrosSection() {
   return (
-    <section id="nosotros" style={{ background:'#111111', padding:'clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem)' }}>
+    <section id="nosotros" style={{ background:BASE, padding:'clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem)' }}>
       <div style={{
         maxWidth:1200, margin:'0 auto',
         display:'grid',
@@ -581,7 +581,7 @@ function NosotrosSection() {
         {/* Right: stat grid */}
         <div className="reveal dl2" style={{
           display:'grid', gridTemplateColumns:'1fr 1fr',
-          gap:1, background:'rgba(201,168,76,0.08)',
+          gap:1, background:'rgba(74,125,142,0.10)',
         }}>
           {[
             { val:'100%',         lbl:'Dedicación al cliente' },
@@ -589,7 +589,7 @@ function NosotrosSection() {
           ].map(s => (
             <div key={s.lbl} style={{
               background:ELEV,
-              border:'1px solid rgba(201,168,76,0.10)',
+              border:'1px solid rgba(74,125,142,0.12)',
               padding:'2.5rem 1.5rem',
               display:'flex', flexDirection:'column',
               alignItems:'center', justifyContent:'center', textAlign:'center',
@@ -610,7 +610,7 @@ function NosotrosSection() {
 const INPUT_BASE = {
   width:'100%',
   background:'rgba(255,255,255,0.02)',
-  border:'1px solid rgba(201,168,76,0.15)',
+  border:'1px solid rgba(74,125,142,0.18)',
   color:SEC,
   fontFamily:'Outfit,sans-serif', fontSize:14,
   padding:'12px 16px',
@@ -623,8 +623,8 @@ const LABEL_STYLE = {
   textTransform:'uppercase', letterSpacing:'0.15em',
   display:'block', marginBottom:8,
 };
-const focusIn  = e => e.target.style.borderColor = 'rgba(201,168,76,0.4)';
-const focusOut = e => e.target.style.borderColor = 'rgba(201,168,76,0.15)';
+const focusIn  = e => e.target.style.borderColor = 'rgba(74,125,142,0.4)';
+const focusOut = e => e.target.style.borderColor = 'rgba(74,125,142,0.18)';
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNpQBmO4oA4f7BUMeB3QYtdZ7GlKKZp_3m1yPBmE9ns_L3Dd2fxhcPp0QvIl1lSjWA/exec';
 
@@ -690,7 +690,7 @@ function ContactoSection() {
             <div key={i} style={{ display:'flex', gap:'1rem', marginBottom:'1.25rem' }}>
               <div style={{
                 width:32, height:32, flexShrink:0,
-                border:'1px solid rgba(201,168,76,0.25)',
+                border:'1px solid rgba(74,125,142,0.28)',
                 display:'flex', alignItems:'center', justifyContent:'center',
               }}>{c.icon}</div>
               <div>
@@ -731,7 +731,7 @@ function ContactoSection() {
                   onFocus={focusIn} onBlur={focusOut}/>
               </div>
               <button type="submit" style={{
-                background: hovBtn ? '#e8c97a' : GOLD,
+                background: hovBtn ? '#3a6475' : GOLD,
                 color:BASE, border:'none', cursor:'pointer',
                 fontFamily:'Outfit,sans-serif', fontSize:11, fontWeight:600,
                 textTransform:'uppercase', letterSpacing:'0.25em',
@@ -758,7 +758,7 @@ function Footer({ logoSrc }) {
   return (
     <footer style={{
       background:BASE,
-      borderTop:'1px solid rgba(201,168,76,0.10)',
+      borderTop:'1px solid rgba(74,125,142,0.12)',
       padding:'3rem clamp(1.5rem,5vw,4rem)',
       textAlign:'center',
     }}>
