@@ -638,9 +638,12 @@ function ContactoSection() {
   const handleSubmit = e => {
     e.preventDefault();
     setLoading(true);
-    const params = new URLSearchParams({ nombre: form.nombre, contacto: form.contacto, desc: form.desc });
-    fetch(`${SCRIPT_URL}?${params}`, { method: 'GET', mode: 'no-cors' })
-      .finally(() => { setLoading(false); setSent(true); });
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ nombre: form.nombre, contacto: form.contacto, descripcion: form.desc }),
+    }).finally(() => { setLoading(false); setSent(true); });
   };
 
   return (
