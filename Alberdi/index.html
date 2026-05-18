@@ -55,20 +55,20 @@
 
     /* ── Animations ──────────────────────────────────── */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(48px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
     }
     @keyframes pulseDot {
       0%, 100% { opacity: 1; transform: scale(1); }
       50%       { opacity: 0.45; transform: scale(0.75); }
     }
-    .fade-up { animation: fadeUp 0.8s ease forwards; opacity: 0; }
-    .d0  { animation-delay: 0s;   }
-    .d1  { animation-delay: 0.1s; }
-    .d2  { animation-delay: 0.2s; }
-    .d3  { animation-delay: 0.3s; }
-    .d4  { animation-delay: 0.4s; }
-    .d5  { animation-delay: 0.5s; }
+    .fade-up { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
+    .d0  { animation-delay: 0s;    }
+    .d1  { animation-delay: 0.12s; }
+    .d2  { animation-delay: 0.24s; }
+    .d3  { animation-delay: 0.36s; }
+    .d4  { animation-delay: 0.48s; }
+    .d5  { animation-delay: 0.60s; }
     .pulse-dot { animation: pulseDot 2s infinite; }
 
     /* ── Glass card ──────────────────────────────────── */
@@ -137,21 +137,30 @@
     }
 
     /* ── Scroll reveal ───────────────────────────────── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-title {
+      will-change: transform, opacity;
+      transition: opacity 0.95s ease, transform 0.95s cubic-bezier(0.22,1,0.36,1);
     }
-    .reveal.in-view { opacity: 1; transform: translateY(0); }
-    .reveal.dl1 { transition-delay: 0.10s; }
-    .reveal.dl2 { transition-delay: 0.20s; }
-    .reveal.dl3 { transition-delay: 0.30s; }
-    .reveal.dl4 { transition-delay: 0.40s; }
-    .reveal.dl5 { transition-delay: 0.50s; }
+    /* initial states */
+    .reveal        { opacity:0; transform: translateY(60px); }
+    .reveal-left   { opacity:0; transform: translateX(-70px); }
+    .reveal-right  { opacity:0; transform: translateX(70px); }
+    .reveal-scale  { opacity:0; transform: scale(0.86) translateY(30px); }
+    .reveal-title  { opacity:0; transform: translateY(45px) skewY(1.8deg); }
+    /* in-view state — all collapse to identity */
+    .reveal.in-view, .reveal-left.in-view, .reveal-right.in-view,
+    .reveal-scale.in-view, .reveal-title.in-view { opacity:1; transform: none; }
+    /* stagger delays */
+    .dl1 { transition-delay: 0.10s; }
+    .dl2 { transition-delay: 0.22s; }
+    .dl3 { transition-delay: 0.34s; }
+    .dl4 { transition-delay: 0.46s; }
+    .dl5 { transition-delay: 0.58s; }
 
     @media (prefers-reduced-motion: reduce) {
       .fade-up, .pulse-dot { animation: none; opacity: 1; }
-      .reveal { opacity: 1; transform: none; transition: none; }
+      .reveal, .reveal-left, .reveal-right,
+      .reveal-scale, .reveal-title { opacity:1; transform:none; transition:none; }
     }
   </style>
 </head>
@@ -513,7 +522,7 @@ function AreasSection() {
   return (
     <section id="areas" style={{ background:SECT, padding:'clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem)' }}>
       <div style={{ maxWidth:1200, margin:'0 auto' }}>
-        <div className="reveal" style={{ marginBottom:'3.5rem', textAlign:'center' }}>
+        <div className="reveal-title" style={{ marginBottom:'3.5rem', textAlign:'center' }}>
           <Eyebrow label="Práctica jurídica" centered/>
           <h2 style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'clamp(2rem,3.5vw,3rem)', fontWeight:300, color:PRIM }}>
             Derecho en todas sus <em style={{ fontStyle:'italic', color:GOLD }}>dimensiones</em>
@@ -522,7 +531,7 @@ function AreasSection() {
 
         <div className="areas-grid">
           {AREAS.map((a, i) => (
-            <div key={a.n} className={`area-card reveal dl${(i % 3) + 1}`} style={{
+            <div key={a.n} className={`area-card reveal-scale dl${(i % 3) + 1}`} style={{
               background:ELEV,
               border:'1px solid rgba(74,125,142,0.10)',
               padding:'2rem 1.75rem',
@@ -557,7 +566,7 @@ function NosotrosSection() {
         gap:'4rem', alignItems:'center',
       }}>
         {/* Left */}
-        <div className="reveal">
+        <div className="reveal-left">
           <img src="./logo.png" alt="Estudio Jurídico Alberdi"
                style={{ height:44, objectFit:'contain', marginBottom:'1.75rem', opacity:0.9, display:'block' }}/>
           <Eyebrow label="El estudio"/>
@@ -579,7 +588,7 @@ function NosotrosSection() {
         </div>
 
         {/* Right: stat grid */}
-        <div className="reveal dl2" style={{
+        <div className="reveal-right" style={{
           display:'grid', gridTemplateColumns:'1fr 1fr',
           gap:1, background:'rgba(74,125,142,0.10)',
         }}>
@@ -655,7 +664,7 @@ function ContactoSection() {
         gap:'4rem',
       }}>
         {/* Left */}
-        <div className="reveal">
+        <div className="reveal-left">
           <img src="./logo.png" alt="Estudio Jurídico Alberdi"
                style={{ height:40, objectFit:'contain', marginBottom:'1.75rem', opacity:0.85, display:'block' }}/>
           <Eyebrow label="Contacto"/>
@@ -702,7 +711,7 @@ function ContactoSection() {
         </div>
 
         {/* Right: form */}
-        <div className="reveal dl2">
+        <div className="reveal-right">
           {sent ? (
             <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', height:'100%', gap:'1rem', textAlign:'center', padding:'3rem 0' }}>
               <div style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:'2rem', color:GOLD }}>✓</div>
@@ -762,24 +771,26 @@ function Footer({ logoSrc }) {
       padding:'3rem clamp(1.5rem,5vw,4rem)',
       textAlign:'center',
     }}>
-      {err
-        ? <div style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:20, color:GOLD, marginBottom:8 }}>Alberdi</div>
-        : <img src={logoSrc} alt="Estudio Jurídico Alberdi" onError={()=>setErr(true)}
-               style={{ height:36, objectFit:'contain', margin:'0 auto 8px', display:'block' }}/>}
-      <div style={{ fontFamily:'Outfit,sans-serif', fontSize:10, color:MUTED, textTransform:'uppercase', letterSpacing:'0.3em', marginBottom:'1.5rem' }}>
-        Estudio Jurídico
-      </div>
+      <div className="reveal">
+        {err
+          ? <div style={{ fontFamily:'"Cormorant Garamond",serif', fontSize:20, color:GOLD, marginBottom:8 }}>Alberdi</div>
+          : <img src={logoSrc} alt="Estudio Jurídico Alberdi" onError={()=>setErr(true)}
+                 style={{ height:36, objectFit:'contain', margin:'0 auto 8px', display:'block' }}/>}
+        <div style={{ fontFamily:'Outfit,sans-serif', fontSize:10, color:MUTED, textTransform:'uppercase', letterSpacing:'0.3em', marginBottom:'1.5rem' }}>
+          Estudio Jurídico
+        </div>
 
-      {/* Ornament */}
-      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'1rem', marginBottom:'1.5rem' }}>
-        <div style={{ width:60, height:1, background:GOLD, opacity:0.35 }}/>
-        <div style={{ width:6, height:6, background:GOLD, transform:'rotate(45deg)', opacity:0.55 }}/>
-        <div style={{ width:60, height:1, background:GOLD, opacity:0.35 }}/>
-      </div>
+        {/* Ornament */}
+        <div className="reveal dl2" style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'1rem', marginBottom:'1.5rem' }}>
+          <div style={{ width:60, height:1, background:GOLD, opacity:0.35 }}/>
+          <div style={{ width:6, height:6, background:GOLD, transform:'rotate(45deg)', opacity:0.55 }}/>
+          <div style={{ width:60, height:1, background:GOLD, opacity:0.35 }}/>
+        </div>
 
-      <p style={{ fontFamily:'Outfit,sans-serif', fontSize:11, color:MUTED, opacity:0.5 }}>
-        © 2025 Estudio Jurídico Alberdi · Todos los derechos reservados
-      </p>
+        <p style={{ fontFamily:'Outfit,sans-serif', fontSize:11, color:MUTED, opacity:0.5 }}>
+          © 2025 Estudio Jurídico Alberdi · Todos los derechos reservados
+        </p>
+      </div>
     </footer>
   );
 }
@@ -800,7 +811,8 @@ function App() {
       }),
       { threshold: 0.10 }
     );
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-title')
+      .forEach(el => obs.observe(el));
     return () => obs.disconnect();
   }, []);
 
