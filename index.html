@@ -14,13 +14,13 @@
         extend: {
           colors: {
             gold: '#4a7d8e',
-            'gold-hover': '#3a6475',
-            base: '#ffffff',
-            elevated: '#f4f8f9',
-            section: '#eaf0f2',
-            'text-primary': '#1a2e35',
-            'text-secondary': '#2d4a55',
-            'text-muted': '#6b8a94',
+            'gold-hover': '#5a9aae',
+            base: '#111111',
+            elevated: '#181818',
+            section: '#151515',
+            'text-primary': '#f0e6d0',
+            'text-secondary': '#e8ddc8',
+            'text-muted': '#8a7d6a',
           },
           fontFamily: {
             cormorant: ['"Cormorant Garamond"', 'serif'],
@@ -36,7 +36,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: #ffffff; color: #2d4a55; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+    body { background: #111111; color: #e8ddc8; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
 
     /* ── Responsive utilities ────────────────────────── */
     .show-mobile  { display: block; }
@@ -113,12 +113,12 @@
     .area-card:hover::after { transform: scaleX(1); }
 
     /* ── Inputs ──────────────────────────────────────── */
-    input::placeholder, textarea::placeholder { color: #6b8a94; opacity: 0.7; }
-    select option { background: #f4f8f9; color: #1a2e35; }
+    input::placeholder, textarea::placeholder { color: #8a7d6a; opacity: 0.6; }
+    select option { background: #181818; color: #e8ddc8; }
 
     /* ── Scrollbar ───────────────────────────────────── */
     ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: #f4f8f9; }
+    ::-webkit-scrollbar-track { background: #111111; }
     ::-webkit-scrollbar-thumb { background: rgba(74,125,142,0.35); border-radius: 3px; }
 
     /* ── Areas grid symmetric ────────────────────────── */
@@ -163,12 +163,12 @@ const { useState, useEffect } = React;
 
 /* ── Shared tokens ─────────────────────────────────── */
 const GOLD   = '#4a7d8e';
-const BASE   = '#ffffff';
-const ELEV   = '#f4f8f9';
-const SECT   = '#eaf0f2';
-const MUTED  = '#6b8a94';
-const PRIM   = '#1a2e35';
-const SEC    = '#2d4a55';
+const BASE   = '#111111';
+const ELEV   = '#181818';
+const SECT   = '#151515';
+const MUTED  = '#8a7d6a';
+const PRIM   = '#f0e6d0';
+const SEC    = '#e8ddc8';
 
 /* ── Inline SVG icons ──────────────────────────────── */
 const IconArrow = () => (
@@ -227,8 +227,8 @@ const BtnGold = ({ href, children }) => {
   return (
     <a href={href} style={{
       display:'inline-flex', alignItems:'center', gap:8,
-      background: hov ? '#3a6475' : GOLD,
-      color: BASE, textDecoration:'none',
+      background: hov ? '#5a9aae' : GOLD,
+      color: '#ffffff', textDecoration:'none',
       fontFamily:'Outfit,sans-serif', fontSize:11, fontWeight:600,
       textTransform:'uppercase', letterSpacing:'0.25em',
       padding:'14px 28px',
@@ -284,7 +284,7 @@ function Navbar({ logoSrc }) {
         height:72, display:'flex', alignItems:'center',
         justifyContent:'space-between',
         padding:'0 clamp(1.5rem,5vw,4rem)',
-        background:'rgba(255,255,255,0.92)',
+        background:'rgba(17,17,17,0.88)',
         backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)',
         borderBottom:'1px solid rgba(74,125,142,0.15)',
       }}>
@@ -337,7 +337,7 @@ function Navbar({ logoSrc }) {
       {open && (
         <div style={{
           position:'fixed', inset:0, zIndex:200,
-          background:'rgba(255,255,255,0.97)',
+          background:'rgba(17,17,17,0.97)',
           display:'flex', flexDirection:'column',
           alignItems:'center', justifyContent:'center',
         }}>
@@ -385,13 +385,13 @@ function Hero() {
       {/* Left-side dark gradient */}
       <div style={{
         position:'absolute', inset:0,
-        background:'linear-gradient(to right, #ffffff 0%, #ffffff 30%, rgba(255,255,255,0.85) 60%, transparent 100%)',
+        background:'linear-gradient(to right, #111111 0%, #111111 25%, rgba(17,17,17,0.7) 55%, transparent 100%)',
       }}/>
 
       {/* Bottom gradient */}
       <div style={{
         position:'absolute', bottom:0, left:0, right:0, height:320,
-        background:'linear-gradient(to top, #ffffff 0%, transparent 100%)',
+        background:'linear-gradient(to top, #111111 0%, transparent 100%)',
       }}/>
 
       {/* Noise texture */}
@@ -731,7 +731,7 @@ function ContactoSection() {
                   onFocus={focusIn} onBlur={focusOut}/>
               </div>
               <button type="submit" style={{
-                background: hovBtn ? '#3a6475' : GOLD,
+                background: hovBtn ? '#5a9aae' : GOLD,
                 color:BASE, border:'none', cursor:'pointer',
                 fontFamily:'Outfit,sans-serif', fontSize:11, fontWeight:600,
                 textTransform:'uppercase', letterSpacing:'0.25em',
