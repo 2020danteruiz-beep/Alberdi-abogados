@@ -138,24 +138,25 @@
 
     /* ── Scroll reveal ───────────────────────────────── */
     .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-title {
-      will-change: transform, opacity;
-      transition: opacity 0.95s ease, transform 0.95s cubic-bezier(0.22,1,0.36,1);
+      transition: opacity 1s ease, transform 1s cubic-bezier(0.22,1,0.36,1);
     }
-    /* initial states */
-    .reveal        { opacity:0; transform: translateY(60px); }
-    .reveal-left   { opacity:0; transform: translateX(-70px); }
-    .reveal-right  { opacity:0; transform: translateX(70px); }
-    .reveal-scale  { opacity:0; transform: scale(0.86) translateY(30px); }
-    .reveal-title  { opacity:0; transform: translateY(45px) skewY(1.8deg); }
-    /* in-view state — all collapse to identity */
-    .reveal.in-view, .reveal-left.in-view, .reveal-right.in-view,
-    .reveal-scale.in-view, .reveal-title.in-view { opacity:1; transform: none; }
-    /* stagger delays */
+    .reveal        { opacity:0; transform: translateY(70px); }
+    .reveal-left   { opacity:0; transform: translateX(-80px); }
+    .reveal-right  { opacity:0; transform: translateX(80px); }
+    .reveal-scale  { opacity:0; transform: scale(0.84) translateY(40px); }
+    .reveal-title  { opacity:0; transform: translateY(50px) skewY(2deg); }
+
+    .reveal.in-view        { opacity:1; transform: translateY(0); }
+    .reveal-left.in-view   { opacity:1; transform: translateX(0); }
+    .reveal-right.in-view  { opacity:1; transform: translateX(0); }
+    .reveal-scale.in-view  { opacity:1; transform: scale(1) translateY(0); }
+    .reveal-title.in-view  { opacity:1; transform: translateY(0) skewY(0deg); }
+
     .dl1 { transition-delay: 0.10s; }
-    .dl2 { transition-delay: 0.22s; }
-    .dl3 { transition-delay: 0.34s; }
-    .dl4 { transition-delay: 0.46s; }
-    .dl5 { transition-delay: 0.58s; }
+    .dl2 { transition-delay: 0.24s; }
+    .dl3 { transition-delay: 0.38s; }
+    .dl4 { transition-delay: 0.52s; }
+    .dl5 { transition-delay: 0.66s; }
 
     @media (prefers-reduced-motion: reduce) {
       .fade-up, .pulse-dot { animation: none; opacity: 1; }
@@ -809,7 +810,7 @@ function App() {
           obs.unobserve(e.target);
         }
       }),
-      { threshold: 0.10 }
+      { threshold: 0.08, rootMargin: '0px 0px -80px 0px' }
     );
     document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-title')
       .forEach(el => obs.observe(el));
