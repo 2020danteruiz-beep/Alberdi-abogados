@@ -143,13 +143,12 @@
     @keyframes animScale { from{opacity:0;transform:scale(0.84) translateY(40px)} to{opacity:1;transform:scale(1) translateY(0)} }
     @keyframes animTitle { from{opacity:0;transform:translateY(50px) skewY(2deg)} to{opacity:1;transform:translateY(0) skewY(0)} }
 
-    .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-title { opacity: 0; }
-
-    .reveal.in-view        { animation: animUp    1s cubic-bezier(0.22,1,0.36,1) forwards; }
-    .reveal-left.in-view   { animation: animLeft  1s cubic-bezier(0.22,1,0.36,1) forwards; }
-    .reveal-right.in-view  { animation: animRight 1s cubic-bezier(0.22,1,0.36,1) forwards; }
-    .reveal-scale.in-view  { animation: animScale 1s cubic-bezier(0.22,1,0.36,1) forwards; }
-    .reveal-title.in-view  { animation: animTitle 1s cubic-bezier(0.22,1,0.36,1) forwards; }
+    /* opacity:0 is set by JS — elements are visible if JS fails */
+    .reveal.in-view        { animation: animUp    1s cubic-bezier(0.22,1,0.36,1) both; }
+    .reveal-left.in-view   { animation: animLeft  1s cubic-bezier(0.22,1,0.36,1) both; }
+    .reveal-right.in-view  { animation: animRight 1s cubic-bezier(0.22,1,0.36,1) both; }
+    .reveal-scale.in-view  { animation: animScale 1s cubic-bezier(0.22,1,0.36,1) both; }
+    .reveal-title.in-view  { animation: animTitle 1s cubic-bezier(0.22,1,0.36,1) both; }
 
     .in-view.dl1 { animation-delay: 0.10s; }
     .in-view.dl2 { animation-delay: 0.24s; }
@@ -804,16 +803,25 @@ function App() {
 
   useEffect(() => {
     const SELECTOR = '.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-title';
+    const els = Array.from(document.querySelectorAll(SELECTOR));
+
+    /* JS oculta — si JS no corre, el contenido queda visible */
+    els.forEach(el => { el.style.opacity = '0'; });
+
+    const trigger = el => {
+      el.style.opacity = '';          /* deja que la animación maneje opacity */
+      el.classList.add('in-view');
+    };
+
     const check = () => {
-      document.querySelectorAll(SELECTOR).forEach(el => {
+      els.forEach(el => {
         if (el.classList.contains('in-view')) return;
-        if (el.getBoundingClientRect().top < window.innerHeight * 0.88) {
-          el.classList.add('in-view');
-        }
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.88) trigger(el);
       });
     };
+
     window.addEventListener('scroll', check, { passive: true });
-    setTimeout(check, 80);
+    setTimeout(check, 100);
     return () => window.removeEventListener('scroll', check);
   }, []);
 
