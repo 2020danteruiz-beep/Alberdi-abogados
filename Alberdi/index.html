@@ -805,11 +805,7 @@ function App() {
     const SELECTOR = '.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-title';
     const els = Array.from(document.querySelectorAll(SELECTOR));
 
-    /* JS oculta — si JS no corre, el contenido queda visible */
-    els.forEach(el => { el.style.opacity = '0'; });
-
     const trigger = el => {
-      el.style.opacity = '';          /* deja que la animación maneje opacity */
       el.classList.add('in-view');
     };
 
